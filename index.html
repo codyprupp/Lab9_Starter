@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "5abbd2460a124968b6f2d4183767c5e6"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -84,10 +92,16 @@
       <button>End Timer</button>
       <button>Console Trace</button>
       <button>Trigger a Global Error</button>
+
+      <button>Try Catch Button</button>
+      <button>Custom Error Test</button>
     </section>
   </main>
+                        
 
   <script>
+    // TrackJS.track('Testing TrackJS!');
+                        
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -100,8 +114,108 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
+    var count;
+
     // Start your code here
     // You may move this JS to another file if you wish
+    window.addEventListener('load', () => {
+      count = 0;
+    });
+
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Hello from console.log");
+    });
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Hello from console.error");
+    });
+    errorBtns[2].addEventListener('click', () => {
+      count++;
+      console.count("Hello from console.count");
+    });
+    errorBtns[3].addEventListener('click', () => {
+      console.warn("Hello from console.warn");
+    });
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(1 != 1, {output: '1 should equal 1'});
+    });
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.head);
+    });
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(document);
+    });
+    errorBtns[8].addEventListener('click', () => {
+      console.group('grouping');
+    });
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd('grouping');
+    });
+    errorBtns[10].addEventListener('click', () => {
+      console.table([{str1: 'hi1'},{str2: 'hi2'},{str3: 'hi3'}]);
+    });
+    errorBtns[11].addEventListener('click', () => {
+      console.time("time");
+    });
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd("time");
+    });
+    errorBtns[13].addEventListener('click', () => {
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { fourth(); };
+      const fourth = () => { console.trace(); };
+      first();
+    });
+    errorBtns[14].addEventListener('click', () => {
+      error;
+    });
+
+    function checkCounter() {
+      if (count < 2) {
+        console.log("Valid counter!");
+      } else {
+        throw new Error('Invalid counter!');
+      }
+    }
+
+    // step 3
+    errorBtns[15].addEventListener('click', () => {
+      try {
+        checkCounter();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        console.info('end of try catch block');
+      }
+    });
+
+    // step 4
+    class ValidNameError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "ValidNameError";
+      }
+    }
+
+    function inputName(name) {
+      if (name == 'Cody') {
+        console.log('cool name');
+      } else {
+        throw new ValidNameError('uncool name');
+      }
+    }
+
+    errorBtns[16].addEventListener('click', () => {
+      inputName('not cody');
+    });
+
+    window.onerror = () => {
+      console.log('I have detected an error');
+    };
+
   </script>
 </body>
 
